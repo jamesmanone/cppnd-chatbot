@@ -45,6 +45,50 @@ ChatBot::~ChatBot()
 //// STUDENT CODE
 ////
 
+ChatBot::ChatBot(ChatBot &source) {
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+
+    if(source._image != NULL)
+        _image = new wxBitmap(*source._image);  // reference counting copy
+    else _image = NULL;
+}
+
+ChatBot::ChatBot(ChatBot &&source) {
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+
+    _image = source._image;
+    source._image = NULL;
+}
+
+ChatBot& ChatBot::operator=(ChatBot &source) {
+    if(this == &source) return *this;
+
+    if(_image != NULL) delete _image;
+
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _image = source._image;
+    source._image = NULL;
+
+    return *this;
+}
+
+ChatBot& ChatBot::operator=(ChatBot &&source) {
+    if(this == &source) return *this;
+
+    if(_image != NULL) delete _image;
+
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+
+    _image = source._image;
+    source._image = NULL;
+
+    return *this;
+}
+
 ////
 //// EOF STUDENT CODE
 

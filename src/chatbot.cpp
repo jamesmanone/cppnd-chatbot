@@ -46,6 +46,7 @@ ChatBot::~ChatBot()
 ////
 
 ChatBot::ChatBot(ChatBot &source) {
+    std::cout << "ChatBot Copy Constructor" << std::endl;
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
 
@@ -55,6 +56,7 @@ ChatBot::ChatBot(ChatBot &source) {
 }
 
 ChatBot::ChatBot(ChatBot &&source) {
+    std::cout << "ChatBot Move Constructor" << std::endl;
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
 
@@ -63,9 +65,10 @@ ChatBot::ChatBot(ChatBot &&source) {
 }
 
 ChatBot& ChatBot::operator=(ChatBot &source) {
+    std::cout << "ChatBot Assignment Operator" << std::endl;
     if(this == &source) return *this;
 
-    if(_image != NULL) delete _image;
+    if(_image != NULL && source._image != _image) delete _image;
 
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
@@ -76,6 +79,7 @@ ChatBot& ChatBot::operator=(ChatBot &source) {
 }
 
 ChatBot& ChatBot::operator=(ChatBot &&source) {
+    std::cout << "ChatBot Move Assignment Operator" << std::endl;
     if(this == &source) return *this;
 
     if(_image != NULL) delete _image;
@@ -87,6 +91,11 @@ ChatBot& ChatBot::operator=(ChatBot &&source) {
     source._image = NULL;
 
     return *this;
+}
+
+void ChatBot::NotifyChatLogic()
+{
+    _chatLogic->SetChatbotHandle(this);
 }
 
 ////
@@ -133,6 +142,7 @@ void ChatBot::SetCurrentNode(GraphNode *node)
 
     // select a random node answer (if several answers should exist)
     std::vector<std::string> answers = _currentNode->GetAnswers();
+
     std::mt19937 generator(int(std::time(0)));
     std::uniform_int_distribution<int> dis(0, answers.size() - 1);
     std::string answer = answers.at(dis(generator));

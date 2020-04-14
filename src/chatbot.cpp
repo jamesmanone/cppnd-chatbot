@@ -68,7 +68,7 @@ ChatBot& ChatBot::operator=(ChatBot &source) {
     std::cout << "ChatBot Assignment Operator" << std::endl;
     if(this == &source) return *this;
 
-    if(_image != NULL && source._image != _image) delete _image;
+    if(_image != NULL) delete _image;
 
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;

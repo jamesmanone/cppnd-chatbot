@@ -1,6 +1,7 @@
 #include "graphedge.h"
 #include "graphnode.h"
 #include <iostream>
+#include <memory>
 
 GraphNode::GraphNode(int id)
 {
@@ -9,13 +10,7 @@ GraphNode::GraphNode(int id)
 
 GraphNode::~GraphNode()
 {
-    //// STUDENT CODE
-    ////
 
-    // if(_chatBot != nullptr) delete _chatBot; 
-
-    ////
-    //// EOF STUDENT CODE
 }
 
 void GraphNode::AddToken(std::string token)
@@ -37,15 +32,15 @@ void GraphNode::AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge)
 ////
 void GraphNode::MoveChatbotHere(ChatBot &&chatbot)
 {
-    _chatBot = new ChatBot(std::move(chatbot));
-    _chatBot->NotifyChatLogic();
-    _chatBot->SetCurrentNode(this);
+    _chatBot = std::move(chatbot);
+    _chatBot.NotifyChatLogic();
+    _chatBot.SetCurrentNode(this);
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
-    newNode->MoveChatbotHere(std::move(*_chatBot));
-    delete _chatBot;
+    newNode->MoveChatbotHere(std::move(_chatBot));
+    _chatBot = ChatBot();
 }
 ////
 //// EOF STUDENT CODE
